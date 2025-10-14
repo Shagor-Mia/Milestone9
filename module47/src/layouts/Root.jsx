@@ -1,10 +1,12 @@
 import React from "react";
-import { NavLink } from "react-router";
+import Header from "../components/Header";
+import { Outlet } from "react-router";
 
 const Root = () => {
   return (
     <nav>
-      <NavLink to={"/"}>Home</NavLink>
+      <Header />
+      <Outlet />
     </nav>
   );
 };
