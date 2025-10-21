@@ -1,7 +1,18 @@
-import React from "react";
-import { NavLink } from "react-router";
+import React, { use } from "react";
+import { Link, NavLink } from "react-router";
+import { AuthContext } from "../contexts/AuthContext/AutrhContext";
 
 const Navbar = () => {
+  const { user, signOutUser } = use(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("signout successful.");
+      })
+      .catch((err) => console.log(err));
+  };
+
   const linkActive = ({ isActive }) =>
     isActive
       ? "relative bg-gradient-to-br from-[#632ee3] to-[#9f62f2] bg-clip-text text-transparent font-semibold after:content-[''] after:absolute after:left-0 after:-bottom-0 after:w-0 after:h-[2px] after:bg-gradient-to-br after:from-[#632ee3] after:to-[#9f62f2] after:transition-all after:duration-300 after:w-full"
@@ -24,6 +35,25 @@ const Navbar = () => {
           Register
         </NavLink>
       </li>
+      <li className=" mx-2">
+        <NavLink className={linkActive} to={"/dashboard"}>
+          Dashboard
+        </NavLink>
+      </li>
+      {user && (
+        <>
+          <li className=" mx-2">
+            <NavLink className={linkActive} to={"/orders"}>
+              Orders
+            </NavLink>
+          </li>
+          <li className=" mx-2">
+            <NavLink className={linkActive} to={"/profile"}>
+              Profile
+            </NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (
@@ -61,7 +91,13 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{link}</ul>
         </div>
         <div className="navbar-end">
-          <button className="btn">button</button>
+          {user ? (
+            <a onClick={handleSignOut} className="btn">
+              Sign Out
+            </a>
+          ) : (
+            <Link to={"/login"}>Login</Link>
+          )}
         </div>
       </div>
     </nav>
